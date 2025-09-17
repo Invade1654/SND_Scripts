@@ -1,7 +1,7 @@
 --[=====[
 [[SND Metadata]]
 author: Invade1654
-version: 1.0.0
+version: 1.0.1
 description: |
   Phantom Trade NPC Helper - Automatically navigates to and interacts with PW Trade NPC
 configs:
@@ -84,7 +84,6 @@ end
 
 function StartDuty()
     sleep(1)
-    yield("/ad start")
     yield("/rsr Auto")
     yield("/bmrai on")
     LogMessage("Duty started")
@@ -106,6 +105,8 @@ function StopDuty()
         Repair()
         dutyCount = 0
     end
+    
+    sleep(1)
     
     local HeliometryCount = Inventory.GetItemCount(47)
     if HeliometryCount > 500 then
@@ -130,6 +131,8 @@ function WipeDuty()
         Repair()
         dutyCount = 0
     end
+    
+    sleep(1)
     
     if consecutiveWipes >= 5 then
         LogMessage("Reached maximum consecutive wipes (5), stopping automation")
@@ -163,8 +166,6 @@ end
 
 function RunAD()
     IPC.AutoDuty.Run(DutyID, 1, true)
-    sleep(5)
-    IPC.AutoDuty.Stop()
 end
 
 function Exchange()
@@ -203,7 +204,7 @@ function Exchange()
     repeat
         yield("/wait " .. interval_rate)
     until Addons.GetAddon("SelectYesno").Ready
-    yield("/callback SelectYesno true 0")
+    yield("/callback SelectYesno true 1")
     yield("/wait 0.5")
     yield("/callback ShopExchangeCurrency true -1") 
     LogMessage("Purchase of " .. ExchangeItem .. " completed")
